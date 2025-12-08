@@ -193,12 +193,29 @@
         </div>
       `).join('');
       
-      // Reinitialize Isotope filtering
-      if (typeof $.Isotope !== 'undefined') {
-        $('.properties-box').isotope({
+      // Initialize Isotope after content is loaded
+      const elem = document.querySelector('.properties-box');
+      const filtersElem = document.querySelector('.properties-filter');
+      if (elem) {
+        const iso = new Isotope(elem, {
           itemSelector: '.properties-items',
-          layoutMode: 'fitRows'
+          layoutMode: 'masonry'
         });
+        
+        if (filtersElem) {
+          filtersElem.addEventListener('click', function(event) {
+            if (event.target.tagName !== 'A') {
+              return;
+            }
+            const filterValue = event.target.getAttribute('data-filter');
+            iso.arrange({
+              filter: filterValue
+            });
+            filtersElem.querySelector('.is_active').classList.remove('is_active');
+            event.target.classList.add('is_active');
+            event.preventDefault();
+          });
+        }
       }
     });
   </script>

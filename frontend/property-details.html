@@ -92,7 +92,7 @@
     <div class="container">
       <div class="row">
         <div class="col-lg-12">
-          <span class="breadcrumb"><a href="#">Home</a>  /  Single Property</span>
+          <span class="breadcrumb"><a href="#">Properties</a>  /   Property Details</span>
           <h3>Single Property</h3>
         </div>
       </div>
@@ -191,11 +191,11 @@
               </li>
               <li>
                 <img src="assets/images/info-icon-02.png" alt="" style="max-width: 52px;">
-                <h4>Contract<br><span>Contract Ready</span></h4>
+                <h4>Contact Agents<br><span>Contract Ready</span></h4>
               </li>
               <li>
                 <img src="assets/images/info-icon-03.png" alt="" style="max-width: 52px;">
-                <h4 id="property-price">Payment<br><span>Payment Process</span></h4>
+                <h4>Bank/Cash<br><span>Payment Process</span></h4>
               </li>
               <li>
                 <img src="assets/images/info-icon-04.png" alt="" style="max-width: 52px;">
@@ -221,20 +221,37 @@
   <script src="assets/js/property-data.js"></script>
 
   <script>
-    // Load property details from URL parameters
+    // Load property details from URL parameters or show most recent property
     document.addEventListener('DOMContentLoaded', function() {
       const params = new URLSearchParams(window.location.search);
       
-      const name = params.get('name');
-      const category = params.get('category');
-      const price = params.get('price');
-      const bedrooms = params.get('bedrooms');
-      const bathrooms = params.get('bathrooms');
-      const area = params.get('area');
-      const floor = params.get('floor');
-      const parking = params.get('parking');
-      const image = params.get('image');
-      const description = params.get('description');
+      let name = params.get('name');
+      let category = params.get('category');
+      let price = params.get('price');
+      let bedrooms = params.get('bedrooms');
+      let bathrooms = params.get('bathrooms');
+      let area = params.get('area');
+      let floor = params.get('floor');
+      let parking = params.get('parking');
+      let image = params.get('image');
+      let description = params.get('description');
+      
+      // If no URL parameters, load the most recent property (last in array)
+      if (!name && window.propertyData && window.propertyData.properties) {
+        const properties = window.propertyData.properties;
+        const mostRecentProperty = properties[properties.length - 1]; // Get last property
+        
+        name = mostRecentProperty.name;
+        category = mostRecentProperty.category;
+        price = mostRecentProperty.price;
+        bedrooms = mostRecentProperty.bedrooms;
+        bathrooms = mostRecentProperty.bathrooms;
+        area = mostRecentProperty.area;
+        floor = mostRecentProperty.floor;
+        parking = mostRecentProperty.parking;
+        image = mostRecentProperty.image;
+        description = mostRecentProperty.description;
+      }
       
       // Update the page with the property details
       if (name) document.getElementById('property-name').textContent = name;
@@ -244,7 +261,6 @@
       if (description) document.getElementById('property-description').innerHTML = description;
       
       // Update the right side card
-      if (price) document.getElementById('property-price').innerHTML = price + '<br><span>Payment Process</span>';
       if (area) document.getElementById('property-area').innerHTML = area + '<br><span>Total Flat Space</span>';
       
       // Update the horizontal property details card below image
